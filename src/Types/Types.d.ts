@@ -3,13 +3,18 @@ declare global {
     id: number;
     depenseName: string;
     depenseDate: string;
-    depensePrix: number;
+    depensePrix:  "" | number;
   }
   type TypeEtatForm =
     | "saisirDEpenseName"
     | "plusInfoSurDepenses"
     | "confirmerDepense";
     type TypeMois = number;
+    interface TypeDepenseCaracteristique {
+      depenseValue: string;
+    depenseDate: string,
+    depensePrix:"" | number,
+    }
 }
 
 export {};

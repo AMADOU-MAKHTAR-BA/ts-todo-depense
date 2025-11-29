@@ -20,11 +20,12 @@ function App() {
   const [etatForm, setEtatForm] = useState<TypeEtatForm>(initialEtatForm);
   const today = new Date().toISOString().split("T")[0]; // "2025-11-01"
 
-  const [depenseCaracteristique, setDepenseCaracteristique] = useState({
-    depenseValue: "",
-    depenseDate: today,
-    depensePrix: 0,
-  });
+  const [depenseCaracteristique, setDepenseCaracteristique] =
+    useState<TypeDepenseCaracteristique>({
+      depenseValue: "",
+      depenseDate: today,
+      depensePrix: "",
+    });
 
   const [todoDepense, setTodoDepense] =
     useState<TypeTodoDepense[]>(initialTodoDepense);
@@ -50,19 +51,20 @@ function App() {
     setDepenseCaracteristique({
       depenseValue: "",
       depenseDate: today,
-      depensePrix: 0,
+      depensePrix: "",
     });
     setEtatForm("saisirDEpenseName");
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
 
     setDepenseCaracteristique((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: type === "number" ? (value === "" ? null : Number(value)) : value,
     }));
   };
+
   const deleteItem: (id: number) => void = (id) => {
     const filterItem: TypeTodoDepense[] = todoDepense.filter(
       (currenTtodo) => currenTtodo.id !== id
@@ -107,6 +109,11 @@ function App() {
                     return null;
                   }
                   setEtatForm("plusInfoSurDepenses");
+
+                  setDepenseCaracteristique((prev) => ({
+                    ...prev,
+                    depensePrix: "",
+                  }));
                 }}
                 className="btn btn-primary"
                 type="button"
@@ -130,7 +137,7 @@ function App() {
               <input
                 type="number"
                 name="depensePrix"
-                value={depenseCaracteristique.depensePrix}
+                value={depenseCaracteristique.depensePrix ?? ""}
                 onChange={handleChange}
                 aria-label="saisir le montant de votre depense"
                 className="input input-secondary"
